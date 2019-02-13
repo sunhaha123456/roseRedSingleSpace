@@ -44,6 +44,7 @@ public class UserManageControler {
 
     /**
      * 功能：操作用户状态
+     * 备注：用户被冻结后，只有在该用户退出后，再次登录时，才会提示该用户已被冻结、注销，登录失败
      * @param id
      * @param state 0：解冻恢复正常 1：冻结 2：注销（只有冻结后，才能注销）
      * @throws Exception

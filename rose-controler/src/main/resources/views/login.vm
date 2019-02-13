@@ -15,8 +15,6 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         var contextPath = [[@{/}]];
-        var interceptorToken = null;
-        var interceptorUserId = null;
         /*]]>*/
     </script>
     <script th:src="@{/static/jquery-1.7.1.min.js}" />
@@ -25,14 +23,11 @@
     <script th:src="@{/static/myFun.js}" />
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var key = null;
         function funOk() {
             if ($.formValidator.pageIsValid('1')) {
-                var params = {"uname": $('#uname').val(), "upwd" : $('#upwd').val(), "code" : $('#code').val(), "key"  : key};
+                var params = {"uname": $('#uname').val(), "upwd" : $('#upwd').val(), "code" : $('#code').val()};
                 var res = ajaxSynchPostJson("login/verify", params);
                 if (res.code == "200") {
-                    interceptorToken = res.data.token;
-                    interceptorUserId = res.data.userId;
                     window.location.href = urlHandleContext("login/toSuccess");
                 } else {
                     $("#id_name").html(res.msg).show(300).delay(1200).hide(300);
@@ -67,12 +62,8 @@
             });
             $(window).resize();
 
-            var res = ajaxSynchGet("tool/getOnlySign", null);
-            if (res.code == "200") {
-                key = res.data.response;
-                $("#randimg").attr('src', urlHandleContext("tool/randImg/getLoginCode") + "&key=" + key);
-                $("#randimg").click(function(){this.src = urlHandleContext("tool/randImg/getLoginCode") + "&key=" + key;});
-            }
+            $("#randimg").attr('src', urlHandleContext("tool/randImg/getLoginCode"));
+            $("#randimg").click(function(){this.src = urlHandleContext("tool/randImg/getLoginCode");});
         });
         /*]]>*/
     </script>

@@ -1,5 +1,6 @@
 package com.rose.controler;
 
+import com.rose.common.data.response.StringResponse;
 import com.rose.common.util.ValueHolder;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserLoginRequest;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * 功能：登录 controller
@@ -54,7 +54,7 @@ public class LoginControler {
 
     @ResponseBody
     @PostMapping(value = "/verify")
-    public Map verify(HttpServletRequest request, @RequestBody @Validated(UserLoginRequest.BaseInfo.class) UserLoginRequest param) throws Exception {
+    public StringResponse verify(HttpServletRequest request, @RequestBody @Validated(UserLoginRequest.BaseInfo.class) UserLoginRequest param) throws Exception {
         return loginService.verify(request, param);
     }
 }

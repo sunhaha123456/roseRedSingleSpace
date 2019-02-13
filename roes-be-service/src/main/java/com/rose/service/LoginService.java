@@ -1,9 +1,9 @@
 package com.rose.service;
 
+import com.rose.common.data.response.StringResponse;
 import com.rose.data.to.request.UserLoginRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * 功能：登录 service
@@ -18,7 +18,7 @@ public interface LoginService {
      * @return
      * @throws Exception
      */
-    Map<String, Object> verify(HttpServletRequest request, UserLoginRequest param) throws Exception;
+    StringResponse verify(HttpServletRequest request, UserLoginRequest param) throws Exception;
 
     /**
      * 功能：session 校验

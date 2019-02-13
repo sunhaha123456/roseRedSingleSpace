@@ -65,7 +65,7 @@ public class RoleManageControler {
     /**
      * 功能：操作角色
      * 备注：角色冻结后，该角色下的用户，不会立刻冻结，
-     *      只有再该用户退出后，再次登录时，才会提示所属角色组已被冻结，登录失败
+     *      只有在该用户退出后，再次登录时，才会提示所属角色组已被冻结，登录失败
      * @param id
      * @param state 0：解冻恢复正常 1：冻结
      * @throws Exception

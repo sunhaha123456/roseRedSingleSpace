@@ -50,11 +50,7 @@ function ajaxSynchPostJson(conectUrl, params) {
         success: function (result) {
             res = result;
         },
-        error: function (xhr, status, error) {},
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("token", interceptorToken);
-            xhr.setRequestHeader("userId", interceptorUserId);
-        }
+        error: function (xhr, status, error) {}
     });
     return res;
 }
@@ -72,11 +68,7 @@ function ajaxSynchGet(conectUrl, params) {
         success: function (result) {
             res = result;
         },
-        error: function (xhr, status, error) {},
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("token", interceptorToken);
-            xhr.setRequestHeader("userId", interceptorUserId);
-        }
+        error: function (xhr, status, error) {}
     });
     return res;
 }
@@ -111,17 +103,13 @@ function ajaxSynchUploadFilePost(conectUrl, params) {
         success: function (result) {
             res = result;
         },
-        error: function (xhr, status, error) {},
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("token", interceptorToken);
-            xhr.setRequestHeader("userId", interceptorUserId);
-        }
+        error: function (xhr, status, error) {}
     });
     return res;
 }
 function urlHandle(url) {
-    return url + '?token=' + interceptorToken + '&userId=' + interceptorUserId + '&randNum=' + Math.random();
+    return url + '?randNum=' + Math.random();
 }
 function urlHandleContext(url) {
-    return contextPath + url + '?token=' + interceptorToken + '&userId=' + interceptorUserId + '&randNum=' + Math.random();
+    return contextPath + url + '?randNum=' + Math.random();
 }

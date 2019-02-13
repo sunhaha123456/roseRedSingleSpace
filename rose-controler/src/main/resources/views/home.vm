@@ -26,8 +26,6 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         var contextPath = [[@{/}]];
-        var interceptorToken = [[${token}]];
-        var interceptorUserId = [[${userId}]];
         /*]]>*/
     </script>
     <script th:src="@{/static/myFun.js}" />

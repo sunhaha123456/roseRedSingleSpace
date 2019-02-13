@@ -1,3 +1,4 @@
+============================= 一套使用session 机制的框架 =============================
 1、
     使用 BaseRepository 时，入参需要是 params.toArray() 形式
 2、现阶段，入参 list 形式时，demo例子：
@@ -23,8 +24,4 @@
  3、直接从配置文件读取值
      @Value("${rose.db.user}")
      private String dbUser;
- 4、redis中用户信息存储结构：
-     user_id_xxx:{token:xxxxxx, userState:x}
-     例如：user_id_1:{"token":"a688c8941dcb410894c3504a9dd74514f94d26fe2cf747a69945f5eaee517d57","userState":0}
-     如果某一用户登录后，再次登录时，则会将上一个用户给顶下来，
-     即：一个账号，只能有一个用户同时在线
+ 4、系统不支持单点登录

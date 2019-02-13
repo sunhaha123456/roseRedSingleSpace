@@ -3,12 +3,10 @@ package com.rose.controler;
 import com.rose.common.data.response.StringResponse;
 import com.rose.common.util.IdUtil;
 import com.rose.common.util.Md5Util;
-import com.rose.common.util.StringUtil;
 import com.rose.data.constant.SystemConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
@@ -40,11 +38,8 @@ public class ToolUtilControler {
     }
 
     @GetMapping(value = "/randImg/getLoginCode")
-    public void getLoginCode(HttpServletRequest req, HttpServletResponse resp, @RequestParam String key) throws Exception {
-        if (StringUtil.isEmpty(key) || key.trim().length() != 32) {
-            return;
-        }
-        randImg(req, resp, key);
+    public void getLoginCode(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        randImg(req, resp);
     }
 
     /**
@@ -54,10 +49,9 @@ public class ToolUtilControler {
      * 备注 ：
      * @param req
      * @param resp
-     * @param codeKey 唯一标志
      * @throws Exception
      */
-    private void randImg(HttpServletRequest req, HttpServletResponse resp, String codeKey) throws Exception {
+    private void randImg(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         //验证码图片的宽度。
         int width=80;
         //验证码图片的高度。
