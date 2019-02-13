@@ -1,0 +1,91 @@
+package com.szhl.sxtx.common.repository.impl;
+
+import com.mongodb.WriteResult;
+import com.szhl.sxtx.common.data.to.mongodb.BaseMDB;
+import com.szhl.sxtx.common.repository.BaseMongoRepository;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
+import java.util.List;
+
+@Repository
+public class BaseMongoRepositoryImpl implements BaseMongoRepository {
+
+    @Inject
+    private MongoTemplate mongoTemplate;
+
+    @Override
+    public void save(BaseMDB baseMDB) {
+        mongoTemplate.save(baseMDB, baseMDB.getCollections());
+    }
+
+    @Override
+    public WriteResult updateMulti(final Query query, final Update update, String collectionName) {
+        return mongoTemplate.updateMulti(query, update, collectionName);
+    }
+
+    @Override
+    public <T extends BaseMDB> List<T> find(CriteriaDefinition criteriaDefinition, T t) {
+        return mongoTemplate.find(new Query(criteriaDefinition), (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> List<T> findPage(CriteriaDefinition criteriaDefinition, T t, int skip, int limit) {
+        return mongoTemplate.find(new Query(criteriaDefinition).skip(skip).limit(limit), (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> T findOne(CriteriaDefinition criteriaDefinition, T t) {
+        return mongoTemplate.findOne(new Query(criteriaDefinition), (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> T findOneById(String id, T t) {
+        return mongoTemplate.findById(id, (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> T findAndModify(CriteriaDefinition criteriaDefinition, Update upate, T t) {
+        return mongoTemplate.findAndModify(new Query(criteriaDefinition), upate, (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> List<T> findPageInQuery(Query query, T t) {
+        //CommandResult commandResult = mongoTemplate.executeCommand("{distinct:'tuser', key:'sex'}");
+        return mongoTemplate.find(query, (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> boolean delete(String id, T t) {
+        /*Query query = new Query(Criteria.where("id").is(id));
+        T obj = mongoTemplate.findOne(query, (Class<T>) t.getClass(), t.getCollections());
+        if (obj != null) {
+            mongoTemplate.remove(obj, t.getCollections());
+            return true;
+        }
+        return false;*/
+        deleteByCriteria(Criteria.where("id").is(id), t);
+        return true;
+    }
+
+    @Override
+    public <T extends BaseMDB> void deleteByCriteria(CriteriaDefinition criteriaDefinition, T t) {
+        WriteResult remove = mongoTemplate.remove(new Query(criteriaDefinition), (Class<T>) t.getClass(), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> long count(CriteriaDefinition criteriaDefinition, T t) {
+        return mongoTemplate.count(new Query(criteriaDefinition), t.getCollections());
+    }
+
+    @Override
+    public <T extends BaseMDB> long count(Query query, T t) {
+        return mongoTemplate.count(query, t.getCollections());
+    }
+
+}

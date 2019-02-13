@@ -1,0 +1,45 @@
+package com.szhl.sxtx.common.repository;
+
+import com.mongodb.WriteResult;
+import com.szhl.sxtx.common.data.to.mongodb.BaseMDB;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+
+import java.util.List;
+
+public interface BaseMongoRepository {
+
+    /**
+     * 功能：mongo 保存操作
+     * 备注：
+     *      1、
+     *      如果原来的对象不存在，那他们都可以向collection里插入数据，
+     *      如果已经存在，save会调用update更新里面的记录
+     *      2、根据 _id判断是否已存在
+     * @param baseMDB
+     */
+    void save(BaseMDB baseMDB);
+
+    WriteResult updateMulti(final Query query, final Update update, String collectionName);
+
+    <T extends BaseMDB> List<T> find(CriteriaDefinition criteriaDefinition, T t);
+
+    <T extends BaseMDB> List<T> findPage(CriteriaDefinition criteriaDefinition, T t, int skip, int limit);
+
+    <T extends BaseMDB> T findOne(CriteriaDefinition criteriaDefinition, T t);
+
+    <T extends BaseMDB> boolean delete(String id, T t);
+
+    <T extends BaseMDB> void deleteByCriteria(CriteriaDefinition criteriaDefinition, T t);
+
+    <T extends BaseMDB> long count(CriteriaDefinition criteriaDefinition, T t);
+
+    <T extends BaseMDB> long count(Query query, T t);
+
+    <T extends BaseMDB> T findOneById(String id, T t);
+
+    <T extends BaseMDB> T findAndModify(CriteriaDefinition criteriaDefinition, Update upate, T t);
+
+    <T extends BaseMDB> List<T> findPageInQuery(Query query, T t);
+}
