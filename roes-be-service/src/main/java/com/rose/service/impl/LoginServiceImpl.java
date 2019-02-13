@@ -2,13 +2,14 @@ package com.rose.service.impl;
 
 import com.rose.common.data.response.ResponseResultCode;
 import com.rose.common.exception.BusinessException;
-import com.rose.common.repository.RedisRepositoryCustom;
-import com.rose.common.util.*;
+import com.rose.common.util.JsonUtil;
+import com.rose.common.util.Md5Util;
+import com.rose.common.util.StringUtil;
+import com.rose.common.util.ValueHolder;
 import com.rose.data.constant.SystemConstant;
 import com.rose.data.entity.TbRoleGroup;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserLoginRequest;
-import com.rose.data.to.vo.UserRedisVo;
 import com.rose.repository.RoleGroupRepository;
 import com.rose.repository.SysUserRepository;
 import com.rose.service.LoginService;
@@ -31,18 +32,16 @@ public class LoginServiceImpl implements LoginService {
     @Inject
     private RoleGroupRepository roleGroupRepository;
     @Inject
-    private RedisRepositoryCustom redisRepositoryCustom;
-    @Inject
     private UserService userService;
     @Inject
     private ValueHolder valueHolder;
 
     @Override
-    public Map<String, Object> verify(UserLoginRequest user) throws Exception {
+    public Map<String, Object> verify(HttpServletRequest request, UserLoginRequest user) throws Exception {
         // 1、校验验证码
-        String codeRedis = redisRepositoryCustom.getString(SystemConstant.LOGIN_CODE_PREFIX + user.getKey());
+        String codeSession = request.getSession().getAttribute(SystemConstant.SESSION_LOGIN_CODE_KEY) + "";
         String codeFront = Md5Util.MD5Encode(user.getCode());
-        if (StringUtil.isEmpty(codeRedis) || StringUtil.isEmpty(codeFront) || !codeRedis.equals(codeFront)) {
+        if (StringUtil.isEmpty(codeSession) || StringUtil.isEmpty(codeFront) || !codeSession.equals(codeFront)) {
             throw new BusinessException(ResponseResultCode.CODE_ERROR);
         }
         // 2、校验用户名和密码，并且用户状态正常
@@ -67,24 +66,13 @@ public class LoginServiceImpl implements LoginService {
         if (role.getRoleState() != 0) {
             throw new BusinessException("用户所属角色组已被冻结！");
         }
-        // 3、更新redis用户信息，更新用户token、用户状态
-        UserRedisVo userRedis = new UserRedisVo(IdUtil.getID() + IdUtil.getID(), 0);
-        userService.userRedisInfoSave(RedisKeyUtil.getRedisUserInfoKey(sysUser.getId()), userRedis);
-        // 4、删除redis验证码
-        redisRepositoryCustom.delete(SystemConstant.LOGIN_CODE_PREFIX + user.getKey());
         Map<String, Object> res = new HashMap();
-        res.put("token", userRedis.getToken());
-        res.put("userId", sysUser.getId());
+        res.put("loginSuccess", "1");
         return res;
     }
 
     @Override
-    public void out() throws Exception {
-        redisRepositoryCustom.delete(valueHolder.getTokenHolder());
-    }
-
-    @Override
-    public boolean tokenValidate(HttpServletRequest request) {
+    public boolean sessionValidate(HttpServletRequest request) {
         String method = request.getMethod();
         if ("OPTIONS".equals(method.toUpperCase())) {
             return true;
@@ -121,6 +109,5 @@ public class LoginServiceImpl implements LoginService {
         request.setAttribute(SystemConstant.SYSTEM_USER_ID, userId);
         valueHolder.setTokenHolder(token);
         valueHolder.setUserIdHolder(Long.valueOf(userId));
-        return true;
     }
 }

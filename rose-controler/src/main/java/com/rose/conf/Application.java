@@ -1,5 +1,6 @@
 package com.rose.conf;
 
+import com.rose.data.constant.SystemConstant;
 import com.rose.interceptor.LoginInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,11 +40,6 @@ public class Application extends WebMvcConfigurerAdapter {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
-        return new StringRedisTemplate(connectionFactory);
-    }
-
     //拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -58,7 +54,7 @@ public class Application extends WebMvcConfigurerAdapter {
     @Bean
     public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
         return (ConfigurableEmbeddedServletContainer container) -> {
-            container.setSessionTimeout(8 * 60, TimeUnit.MINUTES);
+            container.setSessionTimeout(SystemConstant.SESSION_MAX_INACTIVE_INTERVAL, TimeUnit.MINUTES);
         };
     }
 }

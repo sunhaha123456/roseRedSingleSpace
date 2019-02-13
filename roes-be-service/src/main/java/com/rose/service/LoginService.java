@@ -13,21 +13,16 @@ import java.util.Map;
 public interface LoginService {
     /**
      * 功能：登录
+     * @param request
      * @param param
      * @return
      * @throws Exception
      */
-    Map<String, Object> verify(UserLoginRequest param) throws Exception;
+    Map<String, Object> verify(HttpServletRequest request, UserLoginRequest param) throws Exception;
 
     /**
-     * 功能：登出
-     * @throws Exception
-     */
-    void out() throws Exception;
-
-    /**
-     * 功能：token校验，若通过校验，并更新token有效时长
+     * 功能：session 校验
      * @return true：通过校验，false：未通过校验
      */
-    boolean tokenValidate(HttpServletRequest request);
+    boolean sessionValidate(HttpServletRequest request);
 }

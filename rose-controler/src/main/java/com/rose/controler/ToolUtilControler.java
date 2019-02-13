@@ -5,7 +5,6 @@ import com.rose.common.util.IdUtil;
 import com.rose.common.util.Md5Util;
 import com.rose.common.util.StringUtil;
 import com.rose.data.constant.SystemConstant;
-import com.rose.common.repository.RedisRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
-import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,9 +29,6 @@ import java.util.Random;
 @RequestMapping("/tool")
 public class ToolUtilControler {
 
-    @Inject
-    private RedisRepositoryCustom redisRepositoryCustom;
-
     /**
      * 功能：产生唯一标志
      * @return
@@ -44,11 +40,11 @@ public class ToolUtilControler {
     }
 
     @GetMapping(value = "/randImg/getLoginCode")
-    public void getLoginCode(HttpServletResponse resp, @RequestParam String key) throws Exception {
+    public void getLoginCode(HttpServletRequest req, HttpServletResponse resp, @RequestParam String key) throws Exception {
         if (StringUtil.isEmpty(key) || key.trim().length() != 32) {
             return;
         }
-        randImg(resp, key);
+        randImg(req, resp, key);
     }
 
     /**
@@ -56,10 +52,12 @@ public class ToolUtilControler {
      * 		  并把验证码的值放入redis中设置生命周期后保存，供后续验证
      * 		  注意，放入的是经过md5后的密文，所以在取出表单提交的验证码，进行比对时，需要比对加密后的
      * 备注 ：
+     * @param req
      * @param resp
      * @param codeKey 唯一标志
+     * @throws Exception
      */
-    private void randImg(HttpServletResponse resp, String codeKey) throws Exception {
+    private void randImg(HttpServletRequest req, HttpServletResponse resp, String codeKey) throws Exception {
         //验证码图片的宽度。
         int width=80;
         //验证码图片的高度。
@@ -108,8 +106,8 @@ public class ToolUtilControler {
             //将产生的四个随机数组合在一起。
             randomCode.append(strRand);
         }
-        //将四位数字的验证码保存到redis中。
-        redisRepositoryCustom.saveMinutes(SystemConstant.LOGIN_CODE_PREFIX + codeKey, Md5Util.MD5Encode(randomCode.toString()), SystemConstant.LOGIN_CODE_SAVE_TIME);
+        //将四位数字的验证码保存到session中。
+        req.getSession().setAttribute(SystemConstant.SESSION_LOGIN_CODE_KEY, Md5Util.MD5Encode(randomCode.toString()));
 
         //禁止图像缓存。
         resp.setHeader("Pragma","no-cache");

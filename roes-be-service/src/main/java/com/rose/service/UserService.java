@@ -4,7 +4,6 @@ import com.rose.common.data.base.PageList;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserAddRequest;
 import com.rose.data.to.request.UserSearchRequest;
-import com.rose.data.to.vo.UserRedisVo;
 
 /**
  * 功能：user service
@@ -17,5 +16,4 @@ public interface UserService {
     void opert(Long id, Integer state);
     void updateRole(Long id, Long roleId);
     TbSysUser getDetail(Long id);
-    void userRedisInfoSave(String redisKey, UserRedisVo userRedis);
 }

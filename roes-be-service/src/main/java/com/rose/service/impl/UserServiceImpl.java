@@ -3,14 +3,12 @@ package com.rose.service.impl;
 import com.rose.common.data.base.PageList;
 import com.rose.common.data.response.ResponseResultCode;
 import com.rose.common.exception.BusinessException;
-import com.rose.common.repository.RedisRepositoryCustom;
-import com.rose.common.util.*;
-import com.rose.data.constant.SystemConstant;
+import com.rose.common.util.Md5Util;
+import com.rose.common.util.ValueHolder;
 import com.rose.data.entity.TbRoleGroup;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserAddRequest;
 import com.rose.data.to.request.UserSearchRequest;
-import com.rose.data.to.vo.UserRedisVo;
 import com.rose.repository.RoleGroupRepository;
 import com.rose.repository.SysUserRepository;
 import com.rose.repository.SysUserRepositoryCustom;
@@ -33,8 +31,6 @@ public class UserServiceImpl implements UserService {
     private SysUserRepository sysUserRepository;
     @Inject
     private RoleGroupRepository roleGroupRepository;
-    @Inject
-    private RedisRepositoryCustom redisRepositoryCustom;
     @Inject
     private ValueHolder valueHolder;
 
@@ -85,7 +81,6 @@ public class UserServiceImpl implements UserService {
         if (c <= 0) {
             throw new BusinessException(ResponseResultCode.OPERT_ERROR);
         }
-        userRedisInfoSave(RedisKeyUtil.getRedisUserInfoKey(sysUser.getId()), new UserRedisVo(valueHolder.getTokenHolder(), 1));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -126,9 +121,5 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("查无此用户！");
         }
         return user;
-    }
-
-    public void userRedisInfoSave(String redisKey, UserRedisVo userRedis) {
-        redisRepositoryCustom.saveMinutes(redisKey, JsonUtil.objectToJson(userRedis), SystemConstant.TOKEN_SAVE_TIME);
     }
 }

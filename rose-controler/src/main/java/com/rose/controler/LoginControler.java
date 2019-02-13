@@ -1,7 +1,5 @@
 package com.rose.controler;
 
-import com.rose.common.repository.RedisRepositoryCustom;
-import com.rose.common.util.RedisKeyUtil;
 import com.rose.common.util.ValueHolder;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserLoginRequest;
@@ -31,8 +29,6 @@ public class LoginControler {
     @Inject
     private SysUserRepository sysUserRepository;
     @Inject
-    private RedisRepositoryCustom redisRepositoryCustom;
-    @Inject
     private ValueHolder valueHolder;
 
     @GetMapping(value = "/toLogin")
@@ -42,7 +38,7 @@ public class LoginControler {
 
     @GetMapping(value = "/toSuccess")
     public String toSuccess(HttpServletRequest request) throws Exception {
-        if (loginService.tokenValidate(request)) {
+        if (loginService.sessionValidate(request)) {
             TbSysUser user = sysUserRepository.findOne(valueHolder.getUserIdHolder());
             request.setAttribute("uname", user != null ? user.getUname() : "");
             return "home";
@@ -52,15 +48,13 @@ public class LoginControler {
 
     @GetMapping(value = "/out")
     public String out(HttpServletRequest request) throws Exception {
-        if (loginService.tokenValidate(request)) {
-            redisRepositoryCustom.delete(RedisKeyUtil.getRedisUserInfoKey(valueHolder.getUserIdHolder()));
-        }
+        request.getSession().invalidate();
         return "login";
     }
 
     @ResponseBody
     @PostMapping(value = "/verify")
-    public Map verify(@RequestBody @Validated(UserLoginRequest.BaseInfo.class) UserLoginRequest param) throws Exception {
-        return loginService.verify(param);
+    public Map verify(HttpServletRequest request, @RequestBody @Validated(UserLoginRequest.BaseInfo.class) UserLoginRequest param) throws Exception {
+        return loginService.verify(request, param);
     }
 }

@@ -29,7 +29,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        if (!loginService.tokenValidate(request)) {
+        if (!loginService.sessionValidate(request)) {
             getFail(response);
             return false;
         }
