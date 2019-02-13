@@ -25,7 +25,6 @@ import java.util.List;
 
 /**
  * 功能：用户操作行为的日志记录切面
- * Created by jay on 16-5-18.
  */
 @Aspect
 @Configuration
