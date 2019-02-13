@@ -77,7 +77,7 @@ public class UserOperateLogAspect {
 
     }
 
-    @AfterReturning(value = "aspectMethod() && !listMethod() && !queryMethod() && !getMethod() && !countMethod() && !checkMethod() && !exportMethod()", returning = "returnValue")
+    @AfterReturning(value = "aspectMethod() && !listMethod() && !queryMethod() && !getMethod() && !countMethod() && !checkMethod() && !exportMethod() && !toMethod()", returning = "returnValue")
     public void after(JoinPoint point, Object returnValue) {
         try {
                 Object[] args = point.getArgs();
