@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,38 +38,43 @@ public class UserOperateLogAspect {
     @Inject
     private ValueHolder valueHolder;
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..*.*(..))")
+    @Pointcut("execution (* com.rose.controler..*.*(..))")
     private void aspectMethod() {
 
     }
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..list*(..))")
+    @Pointcut("execution (* com.rose.controler..list*(..))")
     private void listMethod() {
 
     }
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..query*(..))")
+    @Pointcut("execution (* com.rose.controler..query*(..))")
     private void queryMethod() {
 
     }
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..get*(..))")
+    @Pointcut("execution (* com.rose.controler..get*(..))")
     private void getMethod() {
 
     }
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..count*(..))")
+    @Pointcut("execution (* com.rose.controler..count*(..))")
     private void countMethod() {
 
     }
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..check*(..))")
+    @Pointcut("execution (* com.rose.controler..check*(..))")
     private void checkMethod() {
 
     }
 
-    @Pointcut("execution (* com.szhl.settle.web.controller..export*(..))")
+    @Pointcut("execution (* com.rose.controler..export*(..))")
     private void exportMethod() {
+
+    }
+
+    @Pointcut("execution (* com.rose.controler..to*(..))")
+    private void toMethod() {
 
     }
 
@@ -93,7 +99,8 @@ public class UserOperateLogAspect {
                 //记录操作日志
                 Long userIdHolder = valueHolder.getUserIdHolder();
                 if (userIdHolder != null) {
-                    TbSysUserLog sysUserLog = new TbSysUserLog(Long.valueOf(userIdHolder), url, ip, JsonUtil.objectToJson(newList), returnValue + "");
+                    TbSysUserLog sysUserLog = new TbSysUserLog(userIdHolder, url, ip, JsonUtil.objectToJson(newList), returnValue + "");
+                    sysUserLog.setCreateDate(new Date());
                     sysUserLogRepository.save(sysUserLog);
                 }
         } catch (Throwable e) {
