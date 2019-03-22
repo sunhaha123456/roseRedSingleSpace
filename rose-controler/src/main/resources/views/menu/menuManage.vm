@@ -1,16 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" th:href="@{/static/easyui/themes/easy.common.css}" />
+    <link rel="stylesheet" th:href="@{/static/easyui/themes/easy.common.css}"></link>
     <script th:inline="javascript">
-        /*<![CDATA[*/
         var contextPath = [[@{/}]];
-        /*]]>*/
     </script>
-    <script th:src="@{/static/easyui/easy.common.js}" />
-    <script th:src="@{/static/myFun.js}" />
+    <script th:src="@{/static/easyui/easy.common.js}"></script>
+    <script th:src="@{/static/myFun.js}"></script>
     <script th:inline="javascript">
-        /*<![CDATA[*/
         function addMenuParentShow() {
             $('#manager_add').dialog('open');
             $('#roleNameAdd').focus();
@@ -245,7 +243,6 @@
             dataGridInit();
             searchMenu();
         });
-        /*]]>*/
     </script>
 </head>
 <body>

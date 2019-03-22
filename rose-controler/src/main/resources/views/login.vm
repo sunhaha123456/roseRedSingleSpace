@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>欢迎使用，请登录！</title>
     <meta charset="UTF-8" />
@@ -11,18 +11,15 @@
             background-size:100% 100%;
         }
     </style>
-    <link rel="stylesheet" th:href="@{/static/formvalidator/style/validator.css}" />
+    <link rel="stylesheet" th:href="@{/static/formvalidator/style/validator.css}"></link>
     <script th:inline="javascript">
-        /*<![CDATA[*/
         var contextPath = [[@{/}]];
-        /*]]>*/
     </script>
-    <script th:src="@{/static/jquery-1.7.1.min.js}" />
-    <script th:src="@{/static/formvalidator/formValidator-4.0.1.js}" />
-    <script th:src="@{/static/formvalidator/formValidatorRegex.js}" />
-    <script th:src="@{/static/myFun.js}" />
+    <script th:src="@{/static/jquery-1.7.1.min.js}"></script>
+    <script th:src="@{/static/formvalidator/formValidator-4.0.1.js}"></script>
+    <script th:src="@{/static/formvalidator/formValidatorRegex.js}"></script>
+    <script th:src="@{/static/myFun.js}"></script>
     <script th:inline="javascript">
-        /*<![CDATA[*/
         function funOk() {
             if ($.formValidator.pageIsValid('1')) {
                 var params = {"uname": $('#uname').val(), "upwd" : $('#upwd').val(), "code" : $('#code').val()};
@@ -65,7 +62,6 @@
             $("#randimg").attr('src', urlHandleContext("tool/randImg/getLoginCode"));
             $("#randimg").click(function(){this.src = urlHandleContext("tool/randImg/getLoginCode");});
         });
-        /*]]>*/
     </script>
 </head>
 <body>
