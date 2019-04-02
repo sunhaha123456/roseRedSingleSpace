@@ -52,6 +52,11 @@ public class UserOperateLogAspect {
 
     }
 
+    @Pointcut("execution (* com.rose.controler..search*(..))")
+    private void searchMethod() {
+
+    }
+
     @Pointcut("execution (* com.rose.controler..get*(..))")
     private void getMethod() {
 
@@ -77,7 +82,7 @@ public class UserOperateLogAspect {
 
     }
 
-    @AfterReturning(value = "aspectMethod() && !listMethod() && !queryMethod() && !getMethod() && !countMethod() && !checkMethod() && !exportMethod() && !toMethod()", returning = "returnValue")
+    @AfterReturning(value = "aspectMethod() && !listMethod() && !queryMethod() && !searchMethod() && !getMethod() && !countMethod() && !checkMethod() && !exportMethod() && !toMethod()", returning = "returnValue")
     public void after(JoinPoint point, Object returnValue) {
         try {
                 Object[] args = point.getArgs();
