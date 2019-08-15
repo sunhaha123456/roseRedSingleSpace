@@ -77,7 +77,6 @@ public class LoginServiceImpl implements LoginService {
         if ("OPTIONS".equals(method.toUpperCase())) {
             return true;
         }
-        valueHolder.removeAll();
         String url = request.getRequestURI();
         HttpSession session = request.getSession();
         Object sessionUserIdObj = session.getAttribute(SystemConstant.SESSION_USER_ID_KEY);
