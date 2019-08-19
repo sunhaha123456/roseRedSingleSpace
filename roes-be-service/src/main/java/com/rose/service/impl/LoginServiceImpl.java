@@ -79,9 +79,14 @@ public class LoginServiceImpl implements LoginService {
         }
         String url = request.getRequestURI();
         HttpSession session = request.getSession();
+        if (session == null) {
+            log.error("Request url：{}，method：{}，拦截此请求：创建session失败", url, method);
+            return false;
+        }
         Object sessionUserIdObj = session.getAttribute(SystemConstant.SESSION_USER_ID_KEY);
         if (sessionUserIdObj == null) {
             log.error("Request url：{}，method：{}，拦截此请求：001-用户未登录或登录已失效！", url, method);
+            session.invalidate();
             return false;
         }
         Long userId = (Long) sessionUserIdObj;
