@@ -4,6 +4,7 @@ import com.rose.common.data.base.PageList;
 import com.rose.common.data.response.ResponseResultCode;
 import com.rose.common.exception.BusinessException;
 import com.rose.common.util.JsonUtil;
+import com.rose.common.util.StringUtil;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserAddRequest;
 import com.rose.data.to.request.UserSearchRequest;
@@ -57,6 +58,14 @@ public class UserManageControler {
     @GetMapping(value= "/updateRole")
     public void updateRole(@RequestParam Long id, @RequestParam Long roleId) throws Exception {
         userService.updateRole(id, roleId);
+    }
+
+    @PostMapping(value= "/updatePasswod")
+    public void updatePasswod(@RequestParam Long id, @RequestParam String userNewPassword) throws Exception {
+        if (StringUtil.isEmpty(userNewPassword)) {
+            throw new BusinessException(ResponseResultCode.PARAM_ERROR);
+        }
+        userService.adminUpdateUserPassword(id, userNewPassword);
     }
 
     @GetMapping(value= "/getDetail")

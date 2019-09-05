@@ -15,5 +15,6 @@ public interface UserService {
     void add(UserAddRequest param) throws Exception;
     void opert(Long id, Integer state);
     void updateRole(Long id, Long roleId);
+    void adminUpdateUserPassword(Long id, String userNewPassword) throws Exception;
     TbSysUser getDetail(Long id);
 }
