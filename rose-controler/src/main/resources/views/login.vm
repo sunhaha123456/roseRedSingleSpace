@@ -47,7 +47,7 @@
                 submitAfterAjaxPrompt : '有数据正在异步验证，请稍等...',
             });
             $("#uname").formValidator({onShow:"请输入用户名",onFocus:"至少1个长度",onCorrect:"用户名合法"}).inputValidator({min:1,empty:{leftEmpty:false,rightEmpty:false,emptyError:"用户名两边不能有空符号"},onError:"用户名不能为空"});
-            $("#upwd").formValidator({onShow:"请输入密码",onFocus:"至少6个长度",onCorrect:"密码合法"}).inputValidator({min:6,empty:{leftEmpty:false,rightEmpty:false,emptyError:"密码两边不能有空符号"},onError:"密码不能为空"});
+            $("#upwd").formValidator({onShow:"请输入密码",onFocus:"至少1个长度",onCorrect:"密码合法"}).inputValidator({min:1,empty:{leftEmpty:false,rightEmpty:false,emptyError:"密码两边不能有空符号"},onError:"密码不能为空"});
             $("#code").formValidator({onShow:"",onFocus:"",onCorrect:""}).inputValidator({min:4,max:4,onError:"4"}).regexValidator({regExp:"^(([[0-9]{4,4}))(]?)$",onError:""});
 
             $(window).resize(function(){
