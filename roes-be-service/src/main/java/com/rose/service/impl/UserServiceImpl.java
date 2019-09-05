@@ -119,6 +119,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateSelfPasswod(Long id, String userOldPassword, String userNewPassword) throws Exception {
+        TbSysUser user = sysUserRepository.findOne(id);
+        if (user == null) {
+            throw new BusinessException(ResponseResultCode.LOGIN_FIRST);
+        }
+        userOldPassword = Md5Util.MD5Encode(userOldPassword);
+        userNewPassword = Md5Util.MD5Encode(userNewPassword);
+        if (!userOldPassword.equals(user.getUpwd())) {
+            throw new BusinessException(ResponseResultCode.USER_OLD_PASSWORD_ERROR);
+        }
+        int c = sysUserRepository.updateSelfPasswod(id, userOldPassword, userNewPassword);
+        if (c <= 0) {
+            throw new BusinessException(ResponseResultCode.OPERT_ERROR);
+        }
+    }
+
     @Override
     public TbSysUser getDetail(Long id) {
         TbSysUser user = sysUserRepository.findOne(id);

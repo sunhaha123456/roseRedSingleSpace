@@ -5,6 +5,7 @@ import com.rose.common.data.response.ResponseResultCode;
 import com.rose.common.exception.BusinessException;
 import com.rose.common.util.JsonUtil;
 import com.rose.common.util.StringUtil;
+import com.rose.data.constant.SystemConstant;
 import com.rose.data.entity.TbSysUser;
 import com.rose.data.to.request.UserAddRequest;
 import com.rose.data.to.request.UserSearchRequest;
@@ -15,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 功能：用户管理 controller
@@ -66,6 +68,18 @@ public class UserManageControler {
             throw new BusinessException(ResponseResultCode.PARAM_ERROR);
         }
         userService.adminUpdateUserPassword(id, userNewPassword);
+    }
+
+    @PostMapping(value= "/updateSelfPasswod")
+    public void updateSelfPasswod(HttpServletRequest request, @RequestParam String userOldPassword, @RequestParam String userNewPassword) throws Exception {
+        if (StringUtil.isEmpty(userOldPassword) || StringUtil.isEmpty(userNewPassword)) {
+            throw new BusinessException(ResponseResultCode.PARAM_ERROR);
+        }
+        String userId = request.getSession().getAttribute(SystemConstant.SESSION_USER_ID_KEY) + "";
+        if (StringUtil.isEmpty(userId)) {
+            throw new BusinessException(ResponseResultCode.LOGIN_FIRST);
+        }
+        userService.updateSelfPasswod(Long.valueOf(userId), userOldPassword, userNewPassword);
     }
 
     @GetMapping(value= "/getDetail")

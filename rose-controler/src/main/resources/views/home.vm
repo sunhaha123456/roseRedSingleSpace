@@ -55,7 +55,7 @@
                     </li>
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="hidden-xs">修改密码</span>
+                            <span class="hidden-xs" onclick="editUserPasswordShow()">修改密码</span>
                         </a>
                     </li>
                     <li class="dropdown user user-menu">
@@ -108,6 +108,35 @@
 <script th:src="@{/static/home/bower_components/bootstrap/bootstrap.min.js}"></script>
 <!-- AdminLTE App -->
 <script th:src="@{/static/home/dist/js/adminlte.min.js}"></script>
+
+<script th:src="@{/static/easyui/easy.common.js}"></script>
+<link rel="stylesheet" th:href="@{/static/easyui/themes/easy.common.css}"></link>
+<style th:inline="text">
+    .l-btn-text {
+        color: #3d3d3d;
+    }
+</style>
+<form id="manager_editUserPassword" class="easyui-dialog" style="margin:0;padding:5px 0 0 25px;color:#333;"
+      data-options="top:150,width:320,title:'编辑管理',modal:true,closed:true,cache:false,iconCls:'icon-user-add',
+       onClose:function () {
+            $('#manager_editUserPassword').form('reset');
+       },
+		buttons:[{
+					text : '提交',
+					iconCls : 'icon-add-green',
+					handler : function () {
+                    editUserPasswordCommit();
+					}
+				},{
+					text:'关闭',
+					iconCls : 'icon-redo',
+					handler:function(){
+                    $('#manager_editUserPassword').dialog('close');
+					}
+				}]">
+    <p>旧密码：<input class="easyui-validatebox" type="text" id="userOldPassword" style="width:200px;" /></p>
+    <p>新密码：<input class="easyui-validatebox" type="text" id="userNewPassword" style="width:200px;" /></p>
+</form>
 </body>
 <script th:inline="javascript">
     var menuParent;
@@ -172,6 +201,21 @@
     function getUniqueSign() {
         signIndex = signIndex + 1;
         return "menu_" + signIndex;
+    }
+    function editUserPasswordShow() {
+        alert(1);
+        $('#manager_editUserPassword').dialog('open');
+    }
+    function editUserPasswordCommit() {
+        var userOldPassword = $('#userOldPassword').val();
+        var userNewPassword = $('#userNewPassword').val();
+        var result = ajaxSynchPostJson("user/userManage/updateSelfPasswod?userOldPassword=" + userOldPassword + "&userNewPassword=" + userNewPassword, null);
+        if (result.code == '200') {
+            alertSuccess();
+            $('#manager_editUserPassword').dialog('close');
+        } else {
+            alertWarn(result.msg);
+        }
     }
     $(function () {
         $('#logo').attr('href', urlHandleContext("login/toSuccess"));

@@ -25,4 +25,8 @@ public interface SysUserRepository extends CrudRepository<TbSysUser, Long> {
     @Modifying
     @Query(value = "update tb_sys_user set upwd = :userNewPassword where id = :id", nativeQuery = true)
     int updateUserPassword(@Param(value = "id") Long id, @Param(value = "userNewPassword") String userNewPassword);
+
+    @Modifying
+    @Query(value = "update tb_sys_user set upwd = :userNewPassword where id = :id and upwd = :userOldPassword", nativeQuery = true)
+    int updateSelfPasswod(@Param(value = "id") Long id, @Param(value = "userOldPassword") String userOldPassword, @Param(value = "userNewPassword") String userNewPassword);
 }

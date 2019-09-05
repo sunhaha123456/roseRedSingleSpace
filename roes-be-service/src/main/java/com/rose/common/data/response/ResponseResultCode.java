@@ -18,7 +18,8 @@ public enum ResponseResultCode {
 	CODE_ERROR(40005, "验证码错误！"),
 	LOGIN_FIRST(40006, "未登录，请先登录！"),
 	USER_STATE_ERROR(40007, "用户状态不正常！"),
-	OPERT_ERROR(40008, "操作失败！");
+	OPERT_ERROR(40008, "操作失败！"),
+	USER_OLD_PASSWORD_ERROR(40009, "用户密码错误！");
 
 	private Integer code;
 	
